@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>墨韵山河 · 匿名参赛作品展</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #e9e2d0 0%, #d9cfb5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', 'Noto Serif SC', 'Georgia', 'Times New Roman', '宋体', serif;
+            padding: 2rem;
+        }
+
+        /* 仿古画框 + 柔和光影 */
+        .gallery-container {
+            max-width: 1100px;
+            width: 100%;
+            background: #fef7e8;
+            border-radius: 42px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(245, 225, 180, 0.5);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* 顶部艺术栏 */
+        .art-header {
+            background: #2c241a;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            border-bottom: 3px solid #c7a86b;
+        }
+
+        .gallery-label {
+            color: #e9cf9e;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 400;
+            background: rgba(255, 215, 150, 0.12);
+            padding: 0.2rem 0.9rem;
+            border-radius: 40px;
+        }
+
+        .exhibition-name {
+            color: #f3e1b3;
+            font-weight: 500;
+            font-size: 0.9rem;
+            font-family: monospace;
+        }
+
+        /* 主画区 */
+        .artwork-stage {
+            padding: 2.5rem 2rem 1.8rem 2rem;
+            background: #f5ede0;
+        }
+
+        /* 仿宣纸底纹 + 画框效果 */
+        .painting-frame {
+            background: #fcf6e8;
+            border: 12px solid #e8dcc8;
+            border-radius: 4px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2), inset 0 1px 4px rgba(255, 255, 200, 0.8);
+            padding: 1rem;
+            transition: transform 0.2s ease;
+        }
+
+        .painting-frame:hover {
+            transform: scale(1.01);
+        }
+
+        .painting-canvas {
+            background: #fdf8ef;
+            width: 100%;
+            border-radius: 2px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* 图片样式，替换原来的SVG */
+        .landscape-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+            border-radius: 2px;
+            object-fit: contain;
+        }
+
+        /* 画作信息栏 */
+        .art-info {
+            margin-top: 1.8rem;
+            text-align: center;
+            border-top: 1px dashed #cfc2a8;
+            padding-top: 1.5rem;
+        }
+
+        .title-section {
+            font-size: 1.8rem;
+            font-weight: 500;
+            letter-spacing: 3px;
+            color: #3e2c1b;
+            background: linear-gradient(135deg, #594c34, #2f2419);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 1px 1px 2px rgba(255,245,200,0.8);
+            margin-bottom: 0.5rem;
+        }
+
+        .sub-status {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            align-items: baseline;
+            margin-top: 0.8rem;
+        }
+
+        .badge-anonymous {
+            background: #d9cdb0;
+            color: #3e2e1e;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: monospace;
+        }
+
+        .award-badge {
+            background: #dbb45c;
+            color: #2c1c0c;
+            font-weight: bold;
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .award-badge::before {
+            content: "🏆";
+            font-size: 1rem;
+        }
+
+        /* 作者寄语/注释 */
+        .art-note {
+            background: #e9dfce;
+            margin: 1.2rem 2rem 1.8rem 2rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            color: #5a4a31;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-style: italic;
+        }
+
+        .note-icon {
+            font-size: 1rem;
+        }
+
+        /* 虚拟链接区 (模仿网址卡片) */
+        .link-simulator {
+            background: #2c241a;
+            padding: 0.9rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-top: 1px solid #c7a86b;
+        }
+
+        .fake-url {
+            background: #1e1912;
+            padding: 0.5rem 1rem;
+            border-radius: 32px;
+            color: #cfc394;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            word-break: break-all;
+        }
+
+        .url-icon {
+            font-size: 1rem;
+        }
+
+        .btn-copy {
+            background: #c7a86b;
+            border: none;
+            color: #221c12;
+            padding: 0.4rem 1rem;
+            border-radius: 28px;
+            font-weight: bold;
+            font-family: inherit;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-copy:hover {
+            background: #e2bc7c;
+            transform: scale(0.97);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .footer-watermark {
+            background: #1f1912;
+            text-align: center;
+            padding: 0.7rem;
+            font-size: 0.7rem;
+            color: #b19768;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 650px) {
+            body {
+                padding: 1rem;
+            }
+            .title-section {
+                font-size: 1.3rem;
+            }
+            .artwork-stage {
+                padding: 1.2rem;
+            }
+            .painting-frame {
+                border-width: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="gallery-container">
+    <!-- 画展头部氛围 -->
+    <div class="art-header">
+        <span class="gallery-label">🎋 云端墨阁 · 春季网展</span>
+        <span class="exhibition-name"># 匿名文人专场</span>
+    </div>
+
+    <!-- 主画区域 -->
+    <div class="artwork-stage">
+        <div class="painting-frame">
+            <div class="painting-canvas">
+                <!-- 替换为你的水墨山水画 -->
+                <img class="landscape-img" src="1.png" alt="云山听泉图" />
+            </div>
+        </div>
+
+        <!-- 画作下方信息 (标题/匿名/奖项) -->
+        <div class="art-info">
+            <div class="title-section">⛰️ 云山听泉图 ⛰️</div>
+            <div class="sub-status">
+                <span class="badge-anonymous">
+                    <span>🖌️</span> 匿名参赛作品
+                </span>
+                <span class="award-badge">
+                    优秀奖
+                </span>
+            </div>
+            <!-- 温情注释: 仿佛小晨发来的内心OS -->
+            <div style="margin-top: 0.8rem; font-size: 0.8rem; color: #8c7654;">
+                水墨设色 · 纸本镜心  |  丙午年 春月
+            </div>
+        </div>
+    </div>
+
+    <!-- 仿页面诗句/留言 (呼应小雅打开笔记本的感动) -->
+    <div class="art-note">
+        <span class="note-icon">✨</span> 群山静默，烟波深处藏灵秀；落笔无声，一纸丹青获嘉誉。
+        <span class="note-icon">🎋</span>
+    </div>
+
+    <!-- 模拟点击链接区 -->
+    <div class="link-simulator">
+        <div class="fake-url">
+            <span class="url-icon">🔗</span>
+            <span id="dynamicUrl">https://artcontest.cn/exhibit/匿名/2026/春/山水画作_优秀奖</span>
+        </div>
+        <button class="btn-copy" id="copyUrlBtn">
+            📋 复制链接
+        </button>
+    </div>
+
+    <div class="footer-watermark">
+        ⚡ 小晨发来的专属链接 · 墨韵无声 致敬匠心 ⚡
+    </div>
+</div>
+
+<script>
+    // 完全模拟真实链接场景：页面加载时控制台输出信息，增加身临其境感
+    (function() {
+        // 优雅的动态标题提醒
+        console.log("%c🎨 小雅推开了山水之门 · 优秀奖画作已呈现 🎨", "color: #b48c48; font-size: 16px; font-weight: bold;");
+        console.log("作品: 《云山听泉图》 | 匿名参赛 | 荣获优秀奖");
+
+        // 设置一个更富有故事性的链接展示（也可以让用户复制到剪切板）
+        const urlSpan = document.getElementById('dynamicUrl');
+        const originalUrl = "https://artcontest.cn/exhibit/匿名/2026/春/山水画作_优秀奖";
+        if(urlSpan) {
+            urlSpan.innerText = originalUrl;
+        }
+
+        // 复制功能，模拟小雅复制网址分享喜悦
+        const copyBtn = document.getElementById('copyUrlBtn');
+        if(copyBtn) {
+            copyBtn.addEventListener('click', async () => {
+                const currentUrl = originalUrl;
+                try {
+                    await navigator.clipboard.writeText(currentUrl);
+                    // 轻反馈
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '✅ 已复制！';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalText;
+                    }, 1800);
+                    // 控制台优雅输出
+                    console.log("📎 小雅复制了获奖作品链接: " + currentUrl);
+                } catch (err) {
+                    // fallback
+                    const textarea = document.createElement('textarea');
+                    textarea.value = currentUrl;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    copyBtn.innerHTML = '📋 复制成功';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = '📋 复制链接';
+                    }, 1500);
+                    console.warn("使用降级复制方式");
+                }
+            });
+        }
+
+        // 额外: 在页面中模拟“点击链接”的事件感，让画框有淡淡呼吸效果
+        const frame = document.querySelector('.painting-frame');
+        if(frame) {
+            frame.addEventListener('click', () => {
+                // 轻动画 + 模拟网页跳转预览 (实际不跳转，保留体验)
+                frame.style.transform = 'scale(0.99)';
+                setTimeout(() => {
+                    frame.style.transform = '';
+                }, 180);
+                // 制造小提醒，类似小雅点击链接后打开的熟悉感
+                const notifyMsg = document.createElement('div');
+                notifyMsg.innerText = '✨ 画卷展开 · 链接来自小晨 ✨';
+                notifyMsg.style.position = 'fixed';
+                notifyMsg.style.bottom = '20px';
+                notifyMsg.style.left = '50%';
+                notifyMsg.style.transform = 'translateX(-50%)';
+                notifyMsg.style.backgroundColor = '#2c241ae6';
+                notifyMsg.style.color = '#f3e1b3';
+                notifyMsg.style.padding = '8px 24px';
+                notifyMsg.style.borderRadius = '40px';
+                notifyMsg.style.fontSize = '0.8rem';
+                notifyMsg.style.fontFamily = 'monospace';
+                notifyMsg.style.backdropFilter = 'blur(6px)';
+                notifyMsg.style.zIndex = '999';
+                notifyMsg.style.pointerEvents = 'none';
+                document.body.appendChild(notifyMsg);
+                setTimeout(() => {
+                    notifyMsg.style.opacity = '0';
+                    setTimeout(() => notifyMsg.remove(), 800);
+                }, 1500);
+            });
+        }
+    })();
+</script>
+</body>
+</html>
